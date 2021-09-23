@@ -4,12 +4,22 @@ const User = require("../models/User");
 
 const router = require("express").Router();
 
-async function makeEventAttributes({ owner, guests, ...attrs }) {
+async function makeEventAttributes({
+  title,
+  description,
+  begin,
+  finish,
+  owner,
+  guests,
+}) {
   const event = {
-    ...attrs,
+    title,
+    description,
+    begin,
+    finish,
     owner: await User.findById(owner),
     guests: await Promise.all(
-      guests.map(async (guest) => await User.findById(guest))
+      guests?.map(async (guest) => await User.findById(guest))
     ),
   };
 
@@ -21,29 +31,43 @@ async function makeEventAttributes({ owner, guests, ...attrs }) {
 }
 
 router.all("/", async (req, res, next) => {
-  const { owner } = req.body;
+  const {
+    owner,
+    title = "",
+    description = "",
+    begin = new Date(),
+    finish = new Date(),
+    guests = [],
+  } = req.body;
   switch (req.method) {
     case GET:
       try {
-        const events = await Event.findById(owner);
+        const events = await Event.find({ owner }).limit(20).exec();
         res.status(200).send(events);
       } catch (error) {
-        res.status(404);
+        res.status(404).send();
       }
       break;
     case POST:
       try {
-        const event = await Event.create(await makeEventAttributes(req.body));
-        await event.save();
+        const event = await Event.create(
+          await makeEventAttributes(
+            owner,
+            title,
+            description,
+            begin,
+            finish,
+            guests
+          )
+        );
         res.status(200).send(event);
       } catch (error) {
-        res.status(404);
+        res.status(500).send();
       }
       break;
     default:
-      res.status(405);
+      res.status(405).send();
   }
-  next();
 });
 
 router.all("/:event_id", async (req, res, next) => {
@@ -52,7 +76,7 @@ router.all("/:event_id", async (req, res, next) => {
   switch (req.method) {
     case GET:
       try {
-        const event = await Event.findOne({ _id: eventId, owner });
+        const event = await Event.findOne({ _id: eventId, owner }).exec();
         res.status(200).send(event);
       } catch (error) {
         res.status(404);
@@ -62,8 +86,9 @@ router.all("/:event_id", async (req, res, next) => {
       try {
         const event = await Event.findOneAndUpdate(
           { _id: eventId, owner },
-          await makeEventAttributes(req.body)
-        );
+          await makeEventAttributes(req.body),
+          { omitUndefined: true }
+        ).exec();
         res.status(200).send(event);
       } catch (error) {
         res.status(404);
@@ -71,8 +96,8 @@ router.all("/:event_id", async (req, res, next) => {
       break;
     case DELETE:
       try {
-        await Event.findOneAndDelete({ _id: eventId, owner });
-        res.status(200).send();
+        await Event.findOneAndDelete({ _id: eventId, owner }).exec();
+        res.status(200).send({ message: `Evento de id ${eventId} deletado` });
       } catch (error) {
         res.status(404);
       }
