@@ -5,21 +5,24 @@ import { UserContext } from "../context/User.js";
 import { InputField } from "./forms/index.js";
 import history from "../history";
 
-function LoginForm() {
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-  const [loading, setLoading] = useState(false);
+function SigninForm() {
+  const { signin } = useContext(UserContext);
 
   const error = {
     name: useStateError("O nome de usuário deve ser preenchido"),
-    password: useStateError("A senha deve ser preenchida"),
+    password: useStateError("As senhas devem ser preenchidas e iguáis"),
   };
 
-  const { login } = useContext(UserContext);
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [repPassword, setRepPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function useStateError(alert, value = false) {
     const [error, setError] = useState(value);
+
     return {
       alert,
       error,
@@ -33,15 +36,14 @@ function LoginForm() {
     };
   }
 
-  async function callLogin() {
+  async function callSignin() {
     try {
-      await login({ name, password });
-      setLoading(false);
+      await signin({ name, password });
       history.push("/");
     } catch (e) {
-      setLoading(false);
       setErrorMessage(e.message);
     }
+    setLoading(false);
   }
 
   function handleSubmit() {
@@ -54,7 +56,7 @@ function LoginForm() {
       error.name.setError(true);
     }
 
-    if (password) {
+    if (password === repPassword && password) {
       formValues.password = password;
       error.password.setError(false);
     } else {
@@ -67,7 +69,7 @@ function LoginForm() {
 
     setErrorMessage("");
     setLoading(true);
-    callLogin();
+    callSignin();
   }
 
   return (
@@ -91,20 +93,27 @@ function LoginForm() {
           value={password}
           label="Senha de usuário"
           placeholder="senha"
-          autoComplete="current-password"
           error={error.password.error && error.password.alert}
         />
-        <Button>Login</Button>
+        <InputField
+          type="password"
+          onChange={({ target: { value } }) => setRepPassword(value)}
+          value={repPassword}
+          label="Repetir a senha de usuário"
+          placeholder="mesma senha"
+          error={error.password.error && error.password.alert}
+        />
+        <Button>Cadastrar</Button>
       </Form>
       <Message
         attached
         hidden={!errorMessage}
         error
-        header="Erro ao efetuar login"
+        header="Erro ao cadastrar"
         content={errorMessage}
       />
     </>
   );
 }
 
-export default LoginForm;
+export default SigninForm;

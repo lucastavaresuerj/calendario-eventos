@@ -1,22 +1,20 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState } from "react";
 import calendar from "../api/calendar";
 
-const UserContext = createContext({
+export const UserContext = createContext({
   user: null,
-  sigin: () => {},
+  signin: () => {},
   login: () => {},
   logout: () => {},
 });
 
-export { UserContext };
-
-export default function UserProvider({ children, restricted }) {
+export default function UserProvider({ children }) {
   const [user, setUser] = useState();
 
   function assingUser(user) {
     setUser(user);
-    localStorage.setItem("token", user.token);
-    localStorage.setItem("owner", user.user.id);
+    sessionStorage.setItem("token", user?.token);
+    sessionStorage.setItem("owner", user?.user.id);
   }
 
   function handleError({ response }) {
@@ -43,7 +41,8 @@ export default function UserProvider({ children, restricted }) {
 
   async function logout() {
     try {
-      const { data } = await calendar.post("/userlogout");
+      await calendar.post("/user/logout");
+      assingUser(null);
     } catch (error) {
       handleError(error);
     }

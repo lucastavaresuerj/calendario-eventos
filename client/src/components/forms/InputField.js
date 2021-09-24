@@ -1,4 +1,4 @@
-import { useState, useRef, forwardRef, useEffect } from "react";
+import { useState } from "react";
 import { Form, Input, Icon, Label } from "semantic-ui-react";
 
 export default InputField;
@@ -35,8 +35,8 @@ function InputField({
         </Label>
       )}
       <Input
-        icon={type == "password" && renderIconPassword()}
-        type={type == "password" ? (isVisible ? "text" : "password") : type}
+        icon={type === "password" && renderIconPassword()}
+        type={type === "password" ? (isVisible ? "text" : "password") : type}
         {...input}
         onChange={(e) => {
           onChange && onChange(e);

@@ -1,5 +1,5 @@
-import { Form, Input, Icon } from "semantic-ui-react";
-import DatePicker, { DateObject } from "react-multi-date-picker";
+import { Form, Icon } from "semantic-ui-react";
+import DatePicker from "react-multi-date-picker";
 
 function RenderCalendarInput({ openCalendar, value, placeholder, formatter }) {
   value = formatter
