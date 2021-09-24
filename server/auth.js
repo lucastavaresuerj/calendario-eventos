@@ -9,7 +9,7 @@ function signIn(userId) {
 
 function verify(req, res, next) {
   const token = req.headers["x-access-token"];
-  const { owner } = req.body;
+  const { owner } = req.headers;
   try {
     if (checkBlackList(token)) {
       throw new Error("Token não é mais válido");

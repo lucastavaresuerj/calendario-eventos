@@ -31,8 +31,8 @@ async function makeEventAttributes({
 }
 
 router.all("/", async (req, res, next) => {
+  const { owner } = req.headers;
   const {
-    owner,
     title = "",
     description = "",
     begin = new Date(),
@@ -71,8 +71,8 @@ router.all("/", async (req, res, next) => {
 });
 
 router.all("/:event_id", async (req, res, next) => {
+  const { owner } = req.headers;
   const eventId = req.params.event_id;
-  const { owner } = req.body;
   switch (req.method) {
     case GET:
       try {
