@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from "react";
-import history from "../history";
+import { useEffect, useContext } from "react";
 
-import { UserContext } from "../context/User.js";
+import history from "src/history";
+import { UserContext } from "src/context/User.js";
 
 function Page({ title = "Calendario", restricted = true, children }) {
   const { user } = useContext(UserContext);
@@ -14,7 +14,7 @@ function Page({ title = "Calendario", restricted = true, children }) {
     history.replace("/login");
   }
 
-  return <div>{children}</div>;
+  return children;
 }
 
 export default Page;

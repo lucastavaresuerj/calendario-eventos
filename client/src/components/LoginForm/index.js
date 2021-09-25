@@ -1,9 +1,9 @@
 import { useState, useContext } from "react";
 import { Form, Button, Message } from "semantic-ui-react";
 
-import { UserContext } from "../context/User.js";
-import { InputField } from "./forms/index.js";
-import history from "../history";
+import { UserContext } from "src/context/User.js";
+import { InputField } from "../";
+import history from "src/history";
 
 function LoginForm() {
   const [name, setName] = useState("");

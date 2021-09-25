@@ -2,8 +2,7 @@ import React from "react";
 import { Grid, Message, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import Page from "../components/Page";
-import LoginForm from "../components/LoginForm";
+import { Page, LoginForm } from "src/components/index";
 
 function Login() {
   return (
