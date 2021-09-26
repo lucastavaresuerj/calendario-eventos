@@ -1,6 +1,7 @@
 export { default as Day } from "./Day";
 export { default as DaysWrapper } from "./DaysWrapper";
 export { default as Event } from "./Event";
+export { default as EventsWrapper } from "./EventsWrapper";
 export { default as Header } from "./Header";
 export { default as InputDate } from "./InputDate";
 export { default as InputField } from "./InputField";
@@ -8,3 +9,5 @@ export { default as LoginForm } from "./LoginForm";
 export { default as Page } from "./Page";
 export { default as SigninForm } from "./SigninForm";
 export { default as TodayButton } from "./TodayButton";
+export { default as Month } from "./Month";
+export { default as LocaleCalendar } from "./LocaleCalendar";
