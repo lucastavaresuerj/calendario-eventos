@@ -3,6 +3,7 @@ const app = require("./app");
 const mongoose = require("mongoose");
 const userRouter = require("./routes/user");
 const eventRouter = require("./routes/event");
+const dayRouter = require("./routes/day");
 const { verify } = require("./auth");
 
 const { MONGO_CONNECTION, DB_NAME } = process.env;
@@ -15,3 +16,4 @@ mongoose.connection.on(
 
 app.use("/user", userRouter);
 app.use("/event", verify, eventRouter);
+app.use("/day", verify, dayRouter);
