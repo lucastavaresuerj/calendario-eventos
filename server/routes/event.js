@@ -30,6 +30,16 @@ async function makeEventAttributes({
   return event;
 }
 
+function makeOptions({ title, description, begin, finish }) {
+  const options = {};
+  if (title) options.title = { $text: title };
+  if (description) options.description = { $text: description };
+  if (begin) options.begin = { $gte: new Date(begin) };
+  if (finish) options.finish = { $lte: new Date(finish) };
+
+  return options;
+}
+
 router.all("/", async (req, res, next) => {
   const { owner } = req.headers;
   const {
@@ -39,10 +49,15 @@ router.all("/", async (req, res, next) => {
     finish = new Date(),
     guests = [],
   } = req.body;
+
+  const options = makeOptions(req.query);
+
   switch (req.method) {
     case GET:
       try {
-        const events = await Event.find({ owner }).limit(20).exec();
+        const events = await Event.find({ owner, ...options })
+          .limit(20)
+          .exec();
         res.status(200).send(events);
       } catch (error) {
         res.status(404).send();
