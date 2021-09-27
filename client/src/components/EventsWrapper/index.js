@@ -5,7 +5,7 @@ import { Event } from "../";
 
 function EventsWrapper({ events = [] }) {
   return (
-    <Table>
+    <Table basic="very" className="event-table">
       <Table.Body>
         {events.map((event, index) => (
           <Event key={`event-index-${index}`} event={event} />

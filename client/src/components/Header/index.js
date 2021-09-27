@@ -2,13 +2,15 @@ import React from "react";
 import { Grid } from "semantic-ui-react";
 
 import "./style.scss";
-import { TodayButton } from "../";
+import { TodayButton, NavDaysButton } from "../";
 
-function Header() {
+function Header({ setDay }) {
   return (
-    <Grid className="test-class">
+    <Grid className="header-app">
       <Grid.Row>
-        <TodayButton />
+        <TodayButton {...{ setDay }} />
+        <NavDaysButton previous />
+        <NavDaysButton next />
       </Grid.Row>
     </Grid>
   );
