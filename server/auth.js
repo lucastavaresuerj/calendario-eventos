@@ -19,7 +19,7 @@ function verify(req, res, next) {
       throw new Error("id de usuário diferente do decodificado");
     }
   } catch (error) {
-    res.send({ err: "Usuário não autenticado" });
+    res.status(401).send({ err: "Usuário não autenticado" });
   }
   next();
 }
