@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import calendar from "../api/calendar";
 
 export const UserContext = createContext({
@@ -11,10 +11,23 @@ export const UserContext = createContext({
 export default function UserProvider({ children }) {
   const [user, setUser] = useState();
 
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      assingUser({
+        token: localStorage.getItem("token"),
+        user: {
+          id: localStorage.getItem("owner"),
+          name: localStorage.getItem("ownerName"),
+        },
+      });
+    }
+  }, []);
+
   function assingUser(user) {
     setUser(user);
-    sessionStorage.setItem("token", user?.token);
-    sessionStorage.setItem("owner", user?.user.id);
+    localStorage.setItem("token", user?.token);
+    localStorage.setItem("owner", user?.user.id);
+    localStorage.setItem("ownerName", user?.user.name);
   }
 
   function handleError({ response }) {
