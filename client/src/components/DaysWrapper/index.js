@@ -33,7 +33,7 @@ function DaysWrapper({ days = {} }) {
   console.log("daysFormated", daysFormated);
 
   return (
-    <Grid className="days-wrapper" celled>
+    <Grid className="days-wrapper" divided="vertically">
       {daysFormated.length ? (
         daysFormated.map(({ day, events }, index) => {
           return <Day key={`day-index-${index}`} {...{ day, events }} />;
@@ -41,7 +41,7 @@ function DaysWrapper({ days = {} }) {
       ) : (
         <Message
           icon="inbox"
-          header="Você não tem mais eventos para os próximos dias."
+          header="Você não tem mais eventos para os próximos 20 dias."
         />
       )}
     </Grid>
