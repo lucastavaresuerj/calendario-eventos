@@ -24,8 +24,7 @@ function WebCalendar() {
   }
 
   return (
-    <div>
-      <Page title="Calendario" />
+    <Page title="Calendario">
       <Header />
       <Grid>
         <Grid.Row>
@@ -37,7 +36,7 @@ function WebCalendar() {
           </Grid.Column>
         </Grid.Row>
       </Grid>
-    </div>
+    </Page>
   );
 }
 
