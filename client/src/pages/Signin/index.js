@@ -2,19 +2,18 @@ import React from "react";
 import { Grid, Message, Icon } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-import { Page, LoginForm } from "src/components/index";
+import { Page, SigninForm } from "src/components";
 
-function Login() {
+function Signin() {
   return (
     <Page title="Calendario | Login" restricted={false}>
       <Grid stackable centered style={{ height: "93.5vh" }}>
         <Grid.Column verticalAlign="middle" className="login-form" width={4}>
           <Message attached header="Calendário de eventos" />
-          <LoginForm />
+          <SigninForm />
           <Message attached="bottom" warning>
             <Icon name="help" />
-            Ainda não possui cadastro?{" "}
-            <Link to="/signin">cadastre-se aqui</Link>
+            Já possui cadastro? <Link to="/login">Faça login aqui</Link>
           </Message>
         </Grid.Column>
       </Grid>
@@ -22,4 +21,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signin;
