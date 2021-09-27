@@ -33,16 +33,10 @@ function DaysWrapper({ days = {} }) {
   console.log("daysFormated", daysFormated);
 
   return (
-    <Grid className="days-wrapper">
+    <Grid className="days-wrapper" celled>
       {daysFormated.length ? (
         daysFormated.map(({ day, events }, index) => {
-          return (
-            <Day
-              key={`day-index-${index}`}
-              className="days"
-              {...{ day, events }}
-            />
-          );
+          return <Day key={`day-index-${index}`} {...{ day, events }} />;
         })
       ) : (
         <Message
