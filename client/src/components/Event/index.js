@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { TableCell, TableRow } from "semantic-ui-react";
 
+import "./style.scss";
+
 function Event({
   event: {
     title = "",
@@ -35,7 +37,7 @@ function Event({
   }
 
   return (
-    <TableRow>
+    <TableRow className="event-row">
       <TableCell>{dateFormated}</TableCell>
       <TableCell>{title}</TableCell>
       <TableCell>{description}</TableCell>
