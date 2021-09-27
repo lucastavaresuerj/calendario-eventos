@@ -1,0 +1,12 @@
+.day-header {
+  &.today {
+    color: cornflowerblue;
+  }
+  .label,
+  .day-date {
+    font-size: 26px;
+    width: 40px;
+  }
+  display: flex;
+  align-items: flex-end;
+}
