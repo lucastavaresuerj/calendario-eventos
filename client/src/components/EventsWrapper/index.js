@@ -7,8 +7,8 @@ function EventsWrapper({ events = [] }) {
   return (
     <Table>
       <Table.Body>
-        {events.map((event) => (
-          <Event event={event} />
+        {events.map((event, index) => (
+          <Event key={`event-index-${index}`} event={event} />
         ))}
       </Table.Body>
     </Table>
