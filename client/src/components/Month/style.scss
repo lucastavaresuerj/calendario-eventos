@@ -1,0 +1,25 @@
+.main-calendar-piker {
+  .rmdp-wrapper {
+    .rmdp-arrow-container.rmdp-left {
+      left: 75%;
+    }
+    .rmdp-header-values {
+      font-size: 16px;
+      margin-left: 10px;
+    }
+    .rmdp-day span {
+      font-size: 12px;
+      padding-left: 0.5px;
+    }
+    .rmdp-header {
+      font-size: 12px;
+      height: 32px;
+      line-height: 32px;
+    }
+    .rmdp-day,
+    .rmdp-week-day {
+      height: 28px;
+      width: 28px;
+    }
+  }
+}

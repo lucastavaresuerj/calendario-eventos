@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Calendar } from "react-multi-date-picker";
 
 import * as locales from "./locales";
-import "./style.scss";
 
 function LocaleCalendar({
   locale = "pt-BR",
