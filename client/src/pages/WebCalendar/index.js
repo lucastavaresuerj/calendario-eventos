@@ -4,11 +4,19 @@ import { DateObject } from "react-multi-date-picker";
 
 import "./style.scss";
 import calendar from "src/api/calendar";
-import { Page, Header, DaysWrapper, Month } from "src/components";
+import {
+  Page,
+  Header,
+  DaysWrapper,
+  Month,
+  CreateButton,
+  CreateEventForm,
+} from "src/components";
 
 function WebCalendar() {
   const [day, setDay] = useState(new DateObject());
   const [days, setDays] = useState([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     getDays();
@@ -26,7 +34,6 @@ function WebCalendar() {
           beginDay,
         },
       });
-      console.log(data);
       setDays(data);
     } catch (error) {
       console.log(error);
@@ -38,14 +45,16 @@ function WebCalendar() {
       <Header setDay={setNewDate} />
       <Grid celled className="main">
         <Grid.Row>
-          <Grid.Column width="3">
+          <Grid.Column className="left-column" width="3">
+            <CreateButton onClick={() => setOpen(!open)} />
             <Month setDay={setNewDate} day={day} />
           </Grid.Column>
-          <Grid.Column width="13">
+          <Grid.Column className="right-column" width="13">
             <DaysWrapper days={days} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
+      <CreateEventForm date={day} open={open} setOpen={setOpen} />
     </Page>
   );
 }
