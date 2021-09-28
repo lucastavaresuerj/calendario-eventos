@@ -4,8 +4,6 @@ import { Grid } from "semantic-ui-react";
 import { EventsWrapper, DayHeader } from "../";
 
 function Day({ day = new Date(), events = [] }) {
-  console.log(day);
-
   return (
     <Grid.Row className="days-grid-row">
       <Grid.Column width={2}>
