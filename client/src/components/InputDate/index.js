@@ -1,5 +1,5 @@
 import { Form, Icon } from "semantic-ui-react";
-import DatePicker from "react-multi-date-picker";
+import { LocaleDatePicker } from "../";
 
 function RenderCalendarInput({ openCalendar, value, placeholder, formatter }) {
   value = formatter
@@ -14,13 +14,12 @@ function RenderCalendarInput({ openCalendar, value, placeholder, formatter }) {
   );
 }
 
-function InputDate({ label, placeholder, setter, formatter, style, ...props }) {
+function InputDate({ label, placeholder, formatter, style, ...props }) {
   return (
     <Form.Field>
-      <label className="label-input">{label}</label>
-      <DatePicker
+      {label && <label className="label-input">{label}</label>}
+      <LocaleDatePicker
         {...props}
-        onChange={setter}
         containerStyle={{ display: "unset" }}
         render={<RenderCalendarInput {...{ placeholder, formatter }} />}
       />
