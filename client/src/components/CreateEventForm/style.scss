@@ -1,0 +1,29 @@
+.event-form {
+  left: 50%;
+  position: fixed;
+  top: 20%;
+  z-index: 1000;
+  width: 400px;
+}
+
+.ui.form .rmdp-time-picker {
+  width: 150px;
+  input[type="text"] {
+    border: unset;
+  }
+}
+
+.boxshadow {
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.boxshadow::after {
+  content: "";
+  position: absolute;
+  z-index: -1; /* hide shadow behind image */
+  box-shadow: 0 15px 20px rgba(0, 0, 0, 0.3);
+  width: 70%;
+  left: 15%; /* one half of the remaining 30% */
+  height: 100px;
+  bottom: 0;
+}
