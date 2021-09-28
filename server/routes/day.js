@@ -1,6 +1,16 @@
+const router = require("express").Router();
+
 const Event = require("../models/Event");
 
-const router = require("express").Router();
+function makeDays(startDate = new Date(), numOfDays = 20) {
+  const days = {};
+  for (let i = 1; i <= numOfDays; i++) {
+    const date = new Date(startDate);
+    date.setDate(startDate.getDate() + i);
+    days[date.toISOString().split("T")[0]] = [];
+  }
+  return days;
+}
 
 router.get("/", async (req, res, next) => {
   const { owner } = req.headers;
@@ -10,7 +20,7 @@ router.get("/", async (req, res, next) => {
   const finalDay = new Date(inicialDay);
   finalDay.setDate(inicialDay.getDate() + 20);
 
-  console.log(inicialDay, finalDay);
+  const days20 = makeDays(inicialDay);
 
   try {
     const days = await Event.find({
@@ -27,7 +37,7 @@ router.get("/", async (req, res, next) => {
       };
     }, {});
 
-    res.status(200).send(groupByDate);
+    res.status(200).send({ ...days20, ...groupByDate });
   } catch (error) {
     console.log(error);
     res.status(404);
