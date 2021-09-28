@@ -5,6 +5,10 @@ import "./style.scss";
 
 function TodayButton({ setDay }) {
   const [today, setToday] = useState(new Date());
+  const [secondsInterval, setSecondsInterval] = useState(
+    setInterval(() => setToday(new Date()), 1000)
+  );
+
   var options = {
     weekday: "short",
     year: "numeric",
@@ -16,10 +20,6 @@ function TodayButton({ setDay }) {
     second: "2-digit",
   };
 
-  function editToday() {
-    return setTimeout(() => setToday(new Date()), 1000);
-  }
-
   function formatToday() {
     return today
       .toLocaleString("pt-BR", options)
@@ -29,9 +29,8 @@ function TodayButton({ setDay }) {
   }
 
   useEffect(() => {
-    const todayTimeout = editToday();
-    return () => clearTimeout(todayTimeout);
-  }, [today]);
+    return () => clearInterval(secondsInterval);
+  }, []);
 
   return (
     <Popup
