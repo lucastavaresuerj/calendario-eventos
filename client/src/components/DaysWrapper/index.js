@@ -30,8 +30,6 @@ function DaysWrapper({ days = {} }) {
     );
   }
 
-  console.log("daysFormated", daysFormated);
-
   return (
     <Grid className="days-wrapper" divided="vertically">
       {daysFormated.length ? (
