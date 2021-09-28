@@ -1,4 +1,6 @@
 import { createContext, useEffect, useState } from "react";
+
+import history from "src/history";
 import calendar from "../api/calendar";
 
 export const UserContext = createContext({
@@ -9,19 +11,35 @@ export const UserContext = createContext({
 });
 
 export default function UserProvider({ children }) {
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (localStorage.getItem("token")) {
-      assingUser({
-        token: localStorage.getItem("token"),
-        user: {
-          id: localStorage.getItem("owner"),
-          name: localStorage.getItem("ownerName"),
-        },
-      });
-    }
+    initUser();
+    setInterval(getToken, 290000);
   }, []);
+
+  async function getToken() {
+    const token = await renewToken();
+    console.log("getToken", token);
+    assingUser({ ...user, token });
+  }
+
+  async function initUser() {
+    if (localStorage.getItem("token") && user == null) {
+      try {
+        assingUser({
+          token: await renewToken(),
+          user: {
+            id: localStorage.getItem("owner"),
+            name: localStorage.getItem("ownerName"),
+          },
+        });
+        history.push("/");
+      } catch (error) {
+        console.log("Token expirou", error.message);
+      }
+    }
+  }
 
   function assingUser(user) {
     setUser(user);
@@ -47,6 +65,16 @@ export default function UserProvider({ children }) {
     try {
       const { data } = await calendar.post("/user/signin", { name, password });
       assingUser(data);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function renewToken() {
+    try {
+      const { data } = await calendar.post("user/new-token");
+      console.log("renewToken", data.newToken);
+      return data.newToken;
     } catch (error) {
       handleError(error);
     }

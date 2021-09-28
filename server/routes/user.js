@@ -45,4 +45,12 @@ router.post("/logout", verify, async (req, res, next) => {
   res.status(200).send();
 });
 
+router.post("/new-token", verify, async (req, res, next) => {
+  const token = req.headers["x-access-token"];
+  const { owner } = req.headers;
+  addToBlackList(token);
+  const newToken = signIn({ id: owner });
+  res.status(200).send({ newToken });
+});
+
 module.exports = router;
