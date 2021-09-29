@@ -16,3 +16,4 @@ export { default as DayHeader } from "./DayHeader";
 export { default as NavDaysButton } from "./NavDaysButton";
 export { default as CreateButton } from "./CreateButton";
 export { default as CreateEventForm } from "./CreateEventForm";
+export { default as UserMenu } from "./UserMenu";
