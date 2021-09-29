@@ -15,7 +15,7 @@ export default function UserProvider({ children }) {
 
   useEffect(() => {
     initUser();
-    setInterval(getToken, 290000);
+    setInterval(getToken, 60 * 59 * 1000);
   }, []);
 
   async function getToken() {
@@ -25,19 +25,22 @@ export default function UserProvider({ children }) {
   }
 
   async function initUser() {
-    if (localStorage.getItem("token") && user == null) {
-      try {
-        assingUser({
-          token: await renewToken(),
-          user: {
-            id: localStorage.getItem("owner"),
-            name: localStorage.getItem("ownerName"),
-          },
-        });
-        history.push("/");
-      } catch (error) {
-        console.log("Token expirou", error.message);
+    try {
+      if (localStorage.getItem("token") && user === null) {
+        const newToken = await renewToken();
+        if (newToken) {
+          assingUser({
+            token: newToken,
+            user: {
+              id: localStorage.getItem("owner"),
+              name: localStorage.getItem("ownerName"),
+            },
+          });
+          history.push("/");
+        }
       }
+    } catch (error) {
+      console.log("Token expirou", error.message);
     }
   }
 
@@ -56,6 +59,7 @@ export default function UserProvider({ children }) {
     try {
       const { data } = await calendar.post("/user/login", { name, password });
       assingUser(data);
+      history.push("/");
     } catch (error) {
       handleError(error);
     }
@@ -65,6 +69,7 @@ export default function UserProvider({ children }) {
     try {
       const { data } = await calendar.post("/user/signin", { name, password });
       assingUser(data);
+      history.push("/");
     } catch (error) {
       handleError(error);
     }
