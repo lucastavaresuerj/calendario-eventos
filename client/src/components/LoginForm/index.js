@@ -3,7 +3,6 @@ import { Form, Button, Message } from "semantic-ui-react";
 
 import { UserContext } from "src/context/User.js";
 import { InputField } from "../";
-import history from "src/history";
 
 function LoginForm() {
   const [name, setName] = useState("");
@@ -37,7 +36,6 @@ function LoginForm() {
     try {
       await login({ name, password });
       setLoading(false);
-      history.push("/");
     } catch (e) {
       setLoading(false);
       setErrorMessage(e.message);

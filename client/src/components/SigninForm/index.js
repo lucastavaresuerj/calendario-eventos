@@ -3,7 +3,6 @@ import { Form, Button, Message } from "semantic-ui-react";
 
 import { UserContext } from "src/context/User.js";
 import { InputField } from "../";
-import history from "src/history";
 
 function SigninForm() {
   const { signin } = useContext(UserContext);
@@ -39,7 +38,6 @@ function SigninForm() {
   async function callSignin() {
     try {
       await signin({ name, password });
-      history.push("/");
     } catch (e) {
       setErrorMessage(e.message);
     }
