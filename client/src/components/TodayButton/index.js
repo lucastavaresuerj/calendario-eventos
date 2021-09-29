@@ -5,7 +5,7 @@ import "./style.scss";
 
 function TodayButton({ setDay }) {
   const [today, setToday] = useState(new Date());
-  const [secondsInterval, setSecondsInterval] = useState(
+  const [secondsInterval] = useState(
     setInterval(() => setToday(new Date()), 1000)
   );
 
@@ -30,10 +30,13 @@ function TodayButton({ setDay }) {
 
   useEffect(() => {
     return () => clearInterval(secondsInterval);
-  }, []);
+  }, [secondsInterval]);
 
   return (
     <Popup
+      on="hover"
+      content={formatToday()}
+      inverted
       trigger={
         <Button
           className="today-button"
@@ -41,11 +44,9 @@ function TodayButton({ setDay }) {
           color="grey"
           onClick={() => setDay()}
         >
-          TodayButton
+          Hoje
         </Button>
       }
-      content={formatToday()}
-      inverted
     />
   );
 }
