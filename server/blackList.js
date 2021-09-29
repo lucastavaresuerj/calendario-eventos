@@ -3,7 +3,7 @@ const blackList = {};
 function addToBlackList(token) {
   const blackListLength = Object.keys(blackList).length;
   blackList[blackListLength] = token;
-  setTimeout(() => delete blackList[blackListLength], 300 * 1000);
+  setTimeout(() => delete blackList[blackListLength], 60 * 60 * 1000);
 }
 
 function checkBlackList(token) {

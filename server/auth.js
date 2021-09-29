@@ -4,7 +4,7 @@ const { checkBlackList } = require("./blackList");
 const { JWT_SECRET } = process.env;
 
 function signIn(userId) {
-  return jwt.sign(userId, JWT_SECRET, { expiresIn: 300 });
+  return jwt.sign(userId, JWT_SECRET, { expiresIn: 60 * 60 });
 }
 
 function verify(req, res, next) {
