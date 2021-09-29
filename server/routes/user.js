@@ -22,21 +22,27 @@ router.post("/login", async (req, res, next) => {
   } else {
     res.status(401).send({ err: "Usuário ou senha incorretos" });
   }
-  next();
 });
 
 router.post("/signin", async (req, res, next) => {
   const { name, password } = req.body;
   const findUser = await User.findOne({ name }).exec();
   if (!findUser) {
-    User.create({ name, password: hash(password) }, (err, { _id, name }) => {
-      const token = signIn({ id: _id });
-      res.status(200).json({ token, user: { id: _id, name } });
-    });
+    try {
+      User.create({ name, password: hash(password) }, (err, { _id, name }) => {
+        const token = signIn({ id: _id });
+        res.status(200).json({ token, user: { id: _id, name } });
+        return;
+      });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send("erro interno");
+      return;
+    }
   } else {
     res.status(401).send({ err: "O nome de usuário já existe" });
+    return;
   }
-  next();
 });
 
 router.post("/logout", verify, async (req, res, next) => {
