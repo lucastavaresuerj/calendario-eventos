@@ -1,13 +1,21 @@
 import React from "react";
-import { useState } from "react/cjs/react.development";
+import { useEffect, useState } from "react/cjs/react.development";
 import { Label } from "semantic-ui-react";
 
 import "./style.scss";
 
-function DayHeader({ day = new Date() }) {
-  const [isDayToday, setIsDayToday] = useState(
-    day.setHours(0, 0, 0) == new Date().setHours(0, 0, 0)
-  );
+function DayHeader({ day = new Date(), setDay }) {
+  const [isDayToday, setIsDayToday] = useState(checkToday());
+
+  useEffect(() => {
+    setIsDayToday(checkToday());
+  }, [day]);
+
+  function checkToday() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return day.getTime() === today.getTime();
+  }
 
   function formatMonthWeek() {
     const options = { weekday: "short", month: "short" };
@@ -20,7 +28,10 @@ function DayHeader({ day = new Date() }) {
   }
 
   return (
-    <div className={`day-header ${isDayToday ? "today" : ""}`}>
+    <div
+      className={`day-header ${isDayToday ? "today" : ""}`}
+      onClick={() => setDay(day)}
+    >
       {isDayToday ? (
         <Label circular color="blue">
           {day.getDate()}

@@ -7,6 +7,9 @@
     font-size: 26px;
     width: 40px;
   }
+  :hover {
+    cursor: pointer;
+  }
   display: flex;
   align-items: flex-end;
 }
