@@ -1,4 +1,4 @@
-const { GET, POST, PATCH, DELETE } = require("./types");
+const { GET, POST, DELETE, PUT } = require("./types");
 const Event = require("../models/Event");
 const User = require("../models/User");
 
@@ -22,10 +22,6 @@ async function makeEventAttributes({
       guests?.map(async (guest) => await User.findById(guest))
     ),
   };
-
-  Object.keys(event).forEach(
-    (k) => (event[k] === null || event[k] === undefined) && delete event[k]
-  );
 
   return event;
 }
@@ -66,18 +62,18 @@ router.all("/", async (req, res, next) => {
     case POST:
       try {
         const event = await Event.create(
-          await makeEventAttributes(
+          await makeEventAttributes({
             owner,
             title,
             description,
             begin,
             finish,
-            guests
-          )
+            guests,
+          })
         );
         res.status(200).send(event);
       } catch (error) {
-        res.status(500).send();
+        res.status(500).send(error.message);
       }
       break;
     default:
@@ -88,6 +84,14 @@ router.all("/", async (req, res, next) => {
 router.all("/:event_id", async (req, res, next) => {
   const { owner } = req.headers;
   const eventId = req.params.event_id;
+  const {
+    title = "",
+    description = "",
+    begin = new Date(),
+    finish = new Date(),
+    guests = [],
+  } = req.body;
+
   switch (req.method) {
     case GET:
       try {
@@ -97,16 +101,23 @@ router.all("/:event_id", async (req, res, next) => {
         res.status(404);
       }
       break;
-    case PATCH:
+    case PUT:
       try {
         const event = await Event.findOneAndUpdate(
           { _id: eventId, owner },
-          await makeEventAttributes(req.body),
+          await makeEventAttributes({
+            owner,
+            title,
+            description,
+            begin,
+            finish,
+            guests,
+          }),
           { omitUndefined: true }
         ).exec();
         res.status(200).send(event);
       } catch (error) {
-        res.status(404);
+        res.status(404).send("Não encontrado");
       }
       break;
     case DELETE:
@@ -114,13 +125,12 @@ router.all("/:event_id", async (req, res, next) => {
         await Event.findOneAndDelete({ _id: eventId, owner }).exec();
         res.status(200).send({ message: `Evento de id ${eventId} deletado` });
       } catch (error) {
-        res.status(404);
+        res.status(404).send("Não encontrado");
       }
       break;
     default:
-      res.status(405);
+      res.status(405).send();
   }
-  next();
 });
 
 module.exports = router;
