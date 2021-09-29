@@ -1,3 +1,7 @@
 .days-grid-row .event-table .event-row:first-child td {
   padding-top: 0;
 }
+
+.event-row .description {
+  text-overflow: ellipsis;
+}
