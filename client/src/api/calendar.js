@@ -12,11 +12,14 @@ const calendar = axios.create({
 calendar.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
+    const owner = localStorage.getItem("owner");
 
-    if (token) {
+    if (token && owner) {
       config.headers["x-access-token"] = token;
+      config.headers.owner = owner;
     } else {
       delete calendar.defaults.headers.common["x-access-token"];
+      delete calendar.defaults.headers.common.owner;
     }
     return config;
   },
