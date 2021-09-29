@@ -4,7 +4,7 @@ const Event = require("../models/Event");
 
 function makeDays(startDate = new Date(), numOfDays = 20) {
   const days = {};
-  for (let i = 1; i <= numOfDays; i++) {
+  for (let i = 0; i < numOfDays; i++) {
     const date = new Date(startDate);
     date.setDate(startDate.getDate() + i);
     days[date.toISOString().split("T")[0]] = [];
@@ -18,7 +18,10 @@ router.get("/", async (req, res, next) => {
 
   const inicialDay = beginDay ? new Date(beginDay) : new Date();
   const finalDay = new Date(inicialDay);
+
+  inicialDay.setHours(0, 0, 0);
   finalDay.setDate(inicialDay.getDate() + 20);
+  finalDay.setHours(0, 0, 0);
 
   const days20 = makeDays(inicialDay);
 
@@ -42,8 +45,6 @@ router.get("/", async (req, res, next) => {
     console.log(error);
     res.status(404);
   }
-
-  next();
 });
 
 router.get("/:day", async (req, res, next) => {
@@ -62,8 +63,6 @@ router.get("/:day", async (req, res, next) => {
   } catch (error) {
     res.status(404);
   }
-
-  next();
 });
 
 module.exports = router;
