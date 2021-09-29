@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
-import { DateObject } from "react-multi-date-picker";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import TimePicker from "react-multi-date-picker/plugins/time_picker";
+import { DateObject } from "react-multi-date-picker";
 import {
   Form,
   Input,
@@ -13,14 +13,19 @@ import {
 
 import "./style.scss";
 import { InputDate } from "../";
+import { EventContext } from "src/context/Event";
 
-function CreateEventForm({ date = new Date(), open, setOpen }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [eventDate, setEventDate] = useState(new DateObject(date));
+function CreateEventForm({ open, setOpen, onSubmit, edit, date }) {
+  const eventContext = useContext(EventContext);
 
-  const [startHour, setStartHour] = useState(new DateObject());
-  const [endHour, setEndHour] = useState(new DateObject().add(1, "hour"));
+  const event = eventContext.getEvent();
+
+  const [title, setTitle] = useState(event.title);
+  const [description, setDescription] = useState(event.description);
+  const [eventDate, setEventDate] = useState(event.date || date);
+
+  const [startHour, setStartHour] = useState(event.begin);
+  const [endHour, setEndHour] = useState(event.finish);
 
   const [errorMessage, setErrorMessage] = useState("");
   const [timeoutErrorMessage, setTimeoutErrorMessage] = useState(0);
@@ -36,11 +41,11 @@ function CreateEventForm({ date = new Date(), open, setOpen }) {
 
   useEffect(() => {
     return () => clearTimeout(timeoutErrorMessage);
-  }, []);
+  }, [timeoutErrorMessage]);
 
   function handleDragStart({ clientX, clientY }) {
     const { offsetLeft, offsetTop } = formRef.current;
-    console.log({ offsetLeft, offsetTop, clientX, clientY });
+
     setFormPosition({ offsetLeft, offsetTop, clientX, clientY });
   }
 
@@ -55,6 +60,11 @@ function CreateEventForm({ date = new Date(), open, setOpen }) {
     event.preventDefault();
   }
 
+  function handleClose() {
+    eventContext.cleanEvent();
+    setOpen(false);
+  }
+
   function handleSubmit() {
     setTimeoutErrorMessage(setTimeout(() => setErrorMessage(""), 5000));
     if (!title) {
@@ -63,8 +73,21 @@ function CreateEventForm({ date = new Date(), open, setOpen }) {
     }
     if (!startHour.isValid || !endHour.isValid) {
       setErrorMessage("Os horários dos eventos precisam ter o formato correto");
+
       return;
     }
+
+    if (!eventDate.isValid) {
+      setErrorMessage("O dia do evento precisa ter o formato correto");
+      return;
+    }
+    onSubmit({
+      title,
+      description,
+      begin: new DateObject(eventDate).setHour(startHour.hour),
+      finish: new DateObject(eventDate).setHour(endHour.hour),
+    });
+    setOpen(false);
   }
 
   return (
@@ -79,9 +102,11 @@ function CreateEventForm({ date = new Date(), open, setOpen }) {
           onDragOver={handleDragOver}
         >
           <Message.Content>
-            <Message.Header>Adicionar Evento</Message.Header>
+            <Message.Header>
+              {edit ? "Editar" : "Adicionar"} Evento
+            </Message.Header>
           </Message.Content>
-          <Icon name="close" onClick={() => setOpen(false)} />
+          <Icon name="close" onClick={handleClose} />
         </Message>
         <Form
           className="attached fluid segment"
@@ -126,7 +151,7 @@ function CreateEventForm({ date = new Date(), open, setOpen }) {
           <Form.Group>
             <Form.Field width="4">
               <Button floated="left" primary>
-                Criar
+                {edit ? "Editar" : "Criar"}
               </Button>
             </Form.Field>
             <Form.Field width="12">
