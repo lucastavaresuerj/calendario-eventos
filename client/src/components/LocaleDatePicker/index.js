@@ -10,13 +10,13 @@ function LocaleDatePicker({
   basicFormat = false,
   ...datePickerProps
 }) {
-  const [localeAttr, setLocaleAttr] = useState(getLocale());
+  const [localeAttr] = useState(getLocale());
   const [month, setMonth] = useState();
   const [weekDays, setWeekDays] = useState();
 
   function getLocale() {
     return Object.values(locales).find((loc) => {
-      return loc?.name == locale;
+      return loc?.name === locale;
     });
   }
 
@@ -25,7 +25,7 @@ function LocaleDatePicker({
       setMonth(localeAttr.months.map((month) => month[3 - showMonth.length]));
       setWeekDays(localeAttr.weekDays.map((week) => week[3 - showWeek.length]));
     }
-  }, [localeAttr]);
+  }, [localeAttr, showMonth, showWeek]);
 
   return (
     <DatePicker
